@@ -1,44 +1,44 @@
-import speech_recognition as sr
-import logging
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+from flask import Flask, request, render_template
 
-from gensim.summarization import summarize
+app = Flask(__name__)
 
-r = sr.Recognizer()
-
-speech = False
-
-if speech:
-
-	mic = sr.Microphone()
-
-	with mic as source:
-		r.adjust_for_ambient_noise(source, duration = 0.5)
-		print('listening')
-		audio = r.listen(source)
+@app.route('/profile/<name>')
+def profile(name):
+	return render_template("profile.html", name=name)
 
 
-	file = open("text.txt", "w")
-	file.write(r.recognize_google(audio))
-	file.close()
+@app.route('/')
+def index():
+	return "Method used: %s" % request.method
 
-	print(r.recognize_google(audio))
 
-	print()
+"""
+@app.route('/')
+def index():
+	return "Method used: %s" % request.method
 
-	readFile = open("text.txt", "r")
-	text = readFile.read()
+@app.route("/bacon", methods=['GET', 'POST'])
+def bacon():
+	if request.method == "POST":
+		return "You are using POST"
+	else:
+		return 'You are probably using GET'
 
-	print("Summary:")
-	print(summarize(text, ratio = 0.2))
 
-else:
+#Think of it as connecting an html link to the return response
+@app.route('/tuna')
+def tuna():
+	return '<h2>Tuna is good</h2>'
 
-	print()
-	print()
+@app.route('/profile/<username>')
+def profile(username):
+	return "<h2>Hey there</h2> %s" % username
 
-	readFile = open("avengers.txt", "r")
-	text = readFile.read()
+@app.route('/post/<int:post_id>')
+def show_post(post_id):
+	return "<h2>Post ID is %s</h2>" % post_id
+"""
 
-	print("Summary:")
-	print(summarize(text, ratio = 0.2))
+
+if __name__ == "__main__":
+	app.run()
